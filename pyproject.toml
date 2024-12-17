@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "my_module"
-version = "0.3.2"
-description = ""
+name = "kindle_to_markdown"
+version = "0.0.1"
+description = "A simple program to convert Kindle HTML annotations to a Markdown file."
 license = "Apache 2.0"
-authors = ["Basti Tee <basti.tee@posteo.de>"]
-maintainers = ["Basti Tee <basti.tee@posteo.de>"]
+authors = ["Basti Tee <basti.tee@icloud.com>"]
+maintainers = ["Basti Tee <basti.tee@icloud.com>"]
 readme = "README.md"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -12,14 +12,18 @@ classifiers = [
     "Natural Language :: English",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11"
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8.1"
+python = "^3.9.0"
+click = "^8.1.7"
+beautifulsoup4 = "^4.12.3"
+twine = "^6.0.1"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^2"
@@ -39,7 +43,7 @@ black = "^24"
 pipdeptree = "^2"
 
 [tool.poetry.scripts]
-my_module_cli = 'my_module.__main__:main'
+kindle_to_markdown = 'kindle_to_markdown.__main__:main'
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,6 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "my_module",
+        "kindle_to_markdown",
         "tests",
         ".venv/bin/python"
     ],

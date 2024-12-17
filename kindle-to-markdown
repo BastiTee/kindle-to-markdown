@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "No Kindle annotations HTML provided."
+    exit 1
+fi
+
+ifile="$( cd "$(dirname "$1")"; pwd )/$(basename "$1")"
+ofile="$(dirname "$ifile")/$(basename "$ifile" .html ).md"
+echo -e "$ifile\n>> $ofile"
+
+cd "$( cd "$( dirname "$0" )"; pwd )"
+
+poetry run python \
+-m kindle_to_markdown \
+-i "$ifile" -o "$ofile"
