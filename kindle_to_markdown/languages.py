@@ -12,4 +12,9 @@ SUPPORTED_LANGUAGES: dict = {
         'note': 'Notiz',
         'bookmark': 'Lesezeichen',
     },
+    'fr': {
+        'textmark': 'Surlignement',
+        'note': 'Note',
+        'bookmark': 'Signet',
+    }
 }
