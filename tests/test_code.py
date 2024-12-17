@@ -3,8 +3,8 @@
 
 import __future__  # noqa: F401
 
-from os import path
-from typing import Tuple
+from os import listdir, path
+from typing import Generator, Tuple
 
 from bs4 import BeautifulSoup
 from pytest import raises
@@ -67,65 +67,42 @@ class TestCode:  # noqa: D101
             results = main.extract_note_heading(test_case[0], LANG['de'])
             assert test_case[1] == results
 
-    def test_language_en(self) -> None:  # noqa: D102
-        # Load language
-        assert 'en' in LANG.keys()
-        trsl = LANG['en']
+    def test_extract_annotations(self) -> None:  # noqa: D102
+        for fixture in self.__get_test_fixtures():
+            with open(fixture[1], 'r') as i_fh:
+                soup = BeautifulSoup(i_fh, 'html.parser')
 
-        # Read template file
-        test_file = path.join(path.dirname(__file__), 'res', 'template-book-en.html')
-        with open(test_file, 'r') as i_fh:
-            soup = BeautifulSoup(i_fh, 'html.parser')
-
-        output = main.extract_annotations(soup, trsl)
-        assert output == [
-            '# Basti Tee - My ebook\n',
-            '## First Section\n',
-            '> 🔖 p. 5, pos. 28\n',
-            'A marked text. (p. 5, pos. 35)\n',
-            'More marked text. (p. 6, pos. 44)\n',
-            '> Personal note (p. 6, pos. 44)\n',
-            '> Note without marking text. (p. 6, pos. 49)\n',
-        ]
-
-    def test_language_de(self) -> None:  # noqa: D102
-        # Load language
-        assert 'de' in LANG.keys()
-        trsl = LANG['de']
-
-        # Read template file
-        test_file = path.join(path.dirname(__file__), 'res', 'template-book-de.html')
-        with open(test_file, 'r') as i_fh:
-            soup = BeautifulSoup(i_fh, 'html.parser')
-
-        output = main.extract_annotations(soup, trsl)
-        assert output == [
-            '# Basti Tee - My ebook\n',
-            '## Erster Abschnitt\n',
-            '> 🔖 p. 5, pos. 28\n',
-            'Ein markierter Text. (p. 5, pos. 35)\n',
-            'Mehr markierter Text. (p. 6, pos. 44)\n',
-            '> Persönliche Notiz. (p. 6, pos. 44)\n',
-            '> Notiz ohne Text (p. 6, pos. 49)\n',
-        ]
+            output = main.extract_annotations(soup, LANG.get(fixture[0]))
+            assert output == [
+                '# Basti Tee - My ebook\n',
+                '## First section\n',
+                '> 🔖 p. 5, pos. 28\n',
+                'A marked text. (p. 5, pos. 35)\n',
+                'More marked text. (p. 6, pos. 44)\n',
+                '> Personal note. (p. 6, pos. 44)\n',
+                '> Note without text. (p. 6, pos. 49)\n',
+            ]
 
     def test_guess_language(self) -> None:  # noqa: D102
-        # Identify supported languages
-        for test_case in [
-            ('de', 'template-book-de.html'),
-            ('en', 'template-book-en.html'),
-        ]:
-            test_file = path.join(path.dirname(__file__), 'res', test_case[1])
-            with open(test_file, 'r') as i_fh:
+        # Check supported languages
+        for fixture in self.__get_test_fixtures():
+            with open(fixture[1], 'r') as i_fh:
                 soup = BeautifulSoup(i_fh, 'html.parser')
             _, lang_key = main.guess_language(soup, LANG)
-            assert lang_key == test_case[0]
+            assert lang_key == fixture[0]
 
         # Catch unsupported languages
         test_file = path.join(
-            path.dirname(__file__), 'res', 'template-book-not-supported-lang.html'
+            path.dirname(__file__), 'res', 'not-supported-lang.html'
         )
         with open(test_file, 'r') as i_fh:
             soup = BeautifulSoup(i_fh, 'html.parser')
         with raises(ValueError):
             main.guess_language(soup, LANG)
+
+    def __get_test_fixtures(self) -> Generator[Tuple[str, str], None, None]:
+        res_path = path.join(path.dirname(__file__), 'res')
+        for f in listdir():
+            if not f.startswith('template-book-'):
+                continue
+            yield f[14:16], path.join(res_path, f)
