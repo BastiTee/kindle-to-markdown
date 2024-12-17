@@ -6,7 +6,7 @@
 
 -   Conversion of page bookmarks, text highlights, and notes to Markdown
 -   Included reference positions of annotations
--   Automatic detection of annotation file's language
+-   Automatic detection of annotation file's language (currently supported: en, de)
 
 ## Usage
 
