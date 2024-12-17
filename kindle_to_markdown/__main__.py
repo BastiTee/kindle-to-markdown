@@ -8,18 +8,7 @@ from typing import Any, List, Optional, Tuple
 import click
 from bs4 import BeautifulSoup, PageElement
 
-LANG: dict = {
-    'en': {
-        'textmark': 'Highlight',
-        'note': 'Note',
-        'bookmark': 'Bookmark',
-    },
-    'de': {
-        'textmark': 'Markierung',
-        'note': 'Notiz',
-        'bookmark': 'Lesezeichen',
-    },
-}
+from kindle_to_markdown.languages import SUPPORTED_LANGUAGES
 
 NoteHeading = namedtuple('NoteHeading', ['type', 'page', 'pos', 'chapter'])
 
@@ -62,9 +51,7 @@ def __clean_text(el_text: str) -> str:
     return el_text
 
 
-def extract_annotations(  # noqa: D103
-    soup: BeautifulSoup, trsl: dict[Any, Any]
-) -> List[str]:
+def extract_annotations(soup: BeautifulSoup, trsl: Any) -> List[str]:  # noqa: D103
     output: List[str] = []
 
     # Find title and author
@@ -129,7 +116,7 @@ def guess_language(  # noqa: D103
     note_headings = [sub(r'[\( ].*', '', el.text.strip()) for el in note_headings]
     # These headings must be contained in the dictionary of a support language
     note_headings = list(set(note_headings))
-    for lang_key in LANG.keys():
+    for lang_key in SUPPORTED_LANGUAGES.keys():
         if all([trsl in languages[lang_key].values() for trsl in note_headings]):
             return languages[lang_key], lang_key
 
@@ -171,7 +158,7 @@ def main(input_file: str, output_file: str, print_only: bool) -> None:  # noqa: 
         soup = BeautifulSoup(i_fh, 'html.parser')
 
     try:
-        trsl, _ = guess_language(soup, LANG)
+        trsl, _ = guess_language(soup, SUPPORTED_LANGUAGES)
     except ValueError as e:
         print(e)
         exit(1)

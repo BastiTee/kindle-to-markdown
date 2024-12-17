@@ -10,7 +10,8 @@ from bs4 import BeautifulSoup
 from pytest import raises
 
 from kindle_to_markdown import __main__ as main
-from kindle_to_markdown.__main__ import LANG, NoteHeading
+from kindle_to_markdown.__main__ import NoteHeading
+from kindle_to_markdown.languages import SUPPORTED_LANGUAGES
 
 
 class TestCode:  # noqa: D101
@@ -64,7 +65,7 @@ class TestCode:  # noqa: D101
                 ),
             ),
         ]:
-            results = main.extract_note_heading(test_case[0], LANG['de'])
+            results = main.extract_note_heading(test_case[0], SUPPORTED_LANGUAGES['de'])
             assert test_case[1] == results
 
     def test_extract_annotations(self) -> None:  # noqa: D102
@@ -72,7 +73,7 @@ class TestCode:  # noqa: D101
             with open(fixture[1], 'r') as i_fh:
                 soup = BeautifulSoup(i_fh, 'html.parser')
 
-            output = main.extract_annotations(soup, LANG.get(fixture[0]))
+            output = main.extract_annotations(soup, SUPPORTED_LANGUAGES.get(fixture[0]))
             assert output == [
                 '# Basti Tee - My ebook\n',
                 '## First section\n',
@@ -88,17 +89,15 @@ class TestCode:  # noqa: D101
         for fixture in self.__get_test_fixtures():
             with open(fixture[1], 'r') as i_fh:
                 soup = BeautifulSoup(i_fh, 'html.parser')
-            _, lang_key = main.guess_language(soup, LANG)
+            _, lang_key = main.guess_language(soup, SUPPORTED_LANGUAGES)
             assert lang_key == fixture[0]
 
         # Catch unsupported languages
-        test_file = path.join(
-            path.dirname(__file__), 'res', 'not-supported-lang.html'
-        )
+        test_file = path.join(path.dirname(__file__), 'res', 'not-supported-lang.html')
         with open(test_file, 'r') as i_fh:
             soup = BeautifulSoup(i_fh, 'html.parser')
         with raises(ValueError):
-            main.guess_language(soup, LANG)
+            main.guess_language(soup, SUPPORTED_LANGUAGES)
 
     def __get_test_fixtures(self) -> Generator[Tuple[str, str], None, None]:
         res_path = path.join(path.dirname(__file__), 'res')
