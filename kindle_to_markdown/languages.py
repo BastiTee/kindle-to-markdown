@@ -16,5 +16,10 @@ SUPPORTED_LANGUAGES: dict = {
         'textmark': 'Surlignement',
         'note': 'Note',
         'bookmark': 'Signet',
+    },
+    'it': {
+        'textmark': 'Evidenziazione',
+        'note': 'Nota',
+        'bookmark': 'Segnalibro',
     }
 }
