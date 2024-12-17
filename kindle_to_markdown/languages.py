@@ -30,4 +30,11 @@ SUPPORTED_LANGUAGES: dict = {
         'page': 'Pagina',
         'position': 'Posizione',
     },
+    'es': {
+        'textmark': 'Subrayar',
+        'note': 'Nota',
+        'bookmark': 'Marcador',
+        'page': 'Página',
+        'position': 'Posición',
+    },
 }
