@@ -113,7 +113,8 @@ def guess_language(  # noqa: D103
 ) -> Tuple[dict[Any, Any], str]:
     # Extract the indicators of all the noteHeading elements
     note_headings = soup.find_all('div', class_='noteHeading')
-    note_headings = [sub(r'[\( ].*', '', el.text.strip()) for el in note_headings]
+    note_headings = [el.text.strip() for el in note_headings]
+    note_headings = [sub(r'[\( ].*', '', nh) for nh in note_headings]
     # These headings must be contained in the dictionary of a support language
     note_headings = list(set(note_headings))
     for lang_key in SUPPORTED_LANGUAGES.keys():
