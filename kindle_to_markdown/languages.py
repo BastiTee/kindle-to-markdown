@@ -6,20 +6,28 @@ SUPPORTED_LANGUAGES: dict = {
         'textmark': 'Highlight',
         'note': 'Note',
         'bookmark': 'Bookmark',
+        'page': 'Page',
+        'position': 'Location',
     },
     'de': {
         'textmark': 'Markierung',
         'note': 'Notiz',
         'bookmark': 'Lesezeichen',
+        'page': 'Seite',
+        'position': 'Position',
     },
     'fr': {
         'textmark': 'Surlignement',
         'note': 'Note',
         'bookmark': 'Signet',
+        'page': 'Page',
+        'position': 'Emplacement',
     },
     'it': {
         'textmark': 'Evidenziazione',
         'note': 'Nota',
         'bookmark': 'Segnalibro',
-    }
+        'page': 'Pagina',
+        'position': 'Posizione',
+    },
 }

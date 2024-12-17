@@ -108,13 +108,28 @@ def extract_annotations(soup: BeautifulSoup, trsl: Any) -> List[str]:  # noqa: D
     return output
 
 
+def extract_language_keys_from_note_heading(el_text: str) -> List[str]:  # noqa: D103
+    language_keys = []
+    heading = __clean_text(el_text)
+    h_split = heading.split(' - ', maxsplit=1)
+    language_keys.append(h_split[0])
+    if ' > ' in h_split[1]:  # Remove chapter name
+        h_split[1] = sub(r'.* > ', '', h_split[1])
+    if ' · ' in h_split[1]:
+        language_keys += h_split[1].split(' · ', maxsplit=1)
+    else:
+        language_keys.append(h_split[1])
+    language_keys = [sub(r'[\( ].*', '', lk) for lk in language_keys]
+    return language_keys
+
+
 def guess_language(  # noqa: D103
     soup: BeautifulSoup, languages: dict
 ) -> Tuple[dict[Any, Any], str]:
     # Extract the indicators of all the noteHeading elements
-    note_headings = soup.find_all('div', class_='noteHeading')
-    note_headings = [el.text.strip() for el in note_headings]
-    note_headings = [sub(r'[\( ].*', '', nh) for nh in note_headings]
+    note_headings = []
+    for el in soup.find_all('div', class_='noteHeading'):
+        note_headings += extract_language_keys_from_note_heading(el.text.strip())
     # These headings must be contained in the dictionary of a support language
     note_headings = list(set(note_headings))
     for lang_key in SUPPORTED_LANGUAGES.keys():
