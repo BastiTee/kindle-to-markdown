@@ -1,11 +1,18 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "kindle_to_markdown"
-version = "0.0.2"
+version = "0.0.3"
 description = "A simple program to convert Kindle HTML annotations to a Markdown file."
 license = "Apache 2.0"
 authors = ["Basti Tee <basti.tee@icloud.com>"]
 maintainers = ["Basti Tee <basti.tee@icloud.com>"]
+homepage = "https://github.com/BastiTee/kindle-to-markdown"
+repository = "https://github.com/BastiTee/kindle-to-markdown"
 readme = "README.md"
+keywords = ["kindle", "markdown", "converter", "python"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -44,10 +51,6 @@ pipdeptree = "^2"
 
 [tool.poetry.scripts]
 kindle_to_markdown = 'kindle_to_markdown.__main__:main'
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 # Untyped definitions and calls

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.3
+
+- Add project metadata for better accessiblity on PyPi.org
+
 ## 0.0.2
 
 - Added languages fr, es, it
