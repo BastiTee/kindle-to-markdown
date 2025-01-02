@@ -86,6 +86,6 @@ run-venv:
 	@echo Execute package directly in virtual environment
 	$(POETRY_CMD) run python -m kindle_to_markdown
 
-install-run:
-	@echo Install and run package via CLI using the activated Python env
+install:
+	@echo Install package using the activated Python env
 	python -m pip install --upgrade .
