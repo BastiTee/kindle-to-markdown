@@ -2,6 +2,9 @@
 
 > A simple program to convert Kindle HTML annotations to a Markdown file
 
+![](https://img.shields.io/pypi/v/kindle-to-markdown)
+![](https://img.shields.io/pypi/pyversions/kindle-to-markdown)
+
 ## Features
 
 -   Conversion of page bookmarks, text highlights, and notes to Markdown
@@ -12,7 +15,7 @@
 
 ```shell
 $ kindle_to_markdown --help
-Usage: kindle_to_markdown [OPTIONS]
+Usage: python -m kindle_to_markdown [OPTIONS]
 
   A simple program to convert Kindle HTML annotations to a Markdown file.
 
@@ -21,6 +24,7 @@ Options:
                           [required]
   -o, --output-file PATH  Path to the Markdown file.
   -p, --print-only        Only print Markdown to the console.
+  -s, --suppress-pages    Suppress page references in output.
   --help                  Show this message and exit.
 ```
 
