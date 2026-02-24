@@ -7,6 +7,7 @@
 - Add PEP 561 py.typed marker
 - Add Dependabot configuration
 - Update CI to use astral-sh/setup-uv
+- Add `--suppress-pages` / `-s` CLI option to omit page/position references from output
 
 ## 0.0.3
 
