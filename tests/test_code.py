@@ -110,12 +110,14 @@ class TestCode:
                 ['Markierung', 'Seite', 'Position'],
             ),
             (
-                'Markierung(gelb) - Chapter 1: The Matching Principle: How to Fail at Recruiting Spies > Seite 8 · Position 268',
+                'Markierung(gelb) - Chapter 1: The Matching Principle:'
+                ' How to Fail at Recruiting Spies > Seite 8 · Position 268',
                 NoteHeading(
                     'textmark',
                     '8',
                     '268',
-                    'Chapter 1: The Matching Principle: How to Fail at Recruiting Spies',
+                    'Chapter 1: The Matching Principle:'
+                    ' How to Fail at Recruiting Spies',
                 ),
                 ['Markierung', 'Seite', 'Position'],
             ),
