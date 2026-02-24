@@ -50,7 +50,9 @@ def __clean_text(el_text: str) -> str:
     return el_text
 
 
-def extract_annotations(soup: BeautifulSoup, trsl: Any) -> list[str]:
+def extract_annotations(
+    soup: BeautifulSoup, trsl: Any, suppress_pages: bool = False
+) -> list[str]:
     output: list[str] = []
 
     # Find title and author
@@ -77,10 +79,12 @@ def extract_annotations(soup: BeautifulSoup, trsl: Any) -> list[str]:
             note_head = extract_note_heading(el.text.strip(), trsl)
 
             # Format for output
-            if note_head.page and note_head.pos:
-                note_heading = f'p. {note_head.page}, pos. {note_head.pos}'
-            else:
-                note_heading = f'pos. {note_head.pos}'
+            note_heading = ''
+            if not suppress_pages:
+                if note_head.page and note_head.pos:
+                    note_heading = f'p. {note_head.page}, pos. {note_head.pos}'
+                else:
+                    note_heading = f'pos. {note_head.pos}'
 
             # Identify if new chapter and add if necessary
             if note_head.chapter and (
@@ -91,7 +95,10 @@ def extract_annotations(soup: BeautifulSoup, trsl: Any) -> list[str]:
 
             # Bookmarks have no further content
             if note_head.type == 'bookmark':
-                output.append(f'> 🔖 {note_heading}\n')
+                if note_heading:
+                    output.append(f'> 🔖 {note_heading}\n')
+                else:
+                    output.append('> 🔖\n')
 
         elif clazz == 'noteText':
             note_text = __clean_text(el.text.strip())
@@ -100,9 +107,15 @@ def extract_annotations(soup: BeautifulSoup, trsl: Any) -> list[str]:
 
             # Append content depending on type
             if note_head.type == 'textmark':
-                output.append(f'{note_text} ({note_heading})\n')
+                if note_heading:
+                    output.append(f'{note_text} ({note_heading})\n')
+                else:
+                    output.append(f'{note_text}\n')
             elif note_head.type == 'note':
-                output.append(f'> {note_text} ({note_heading})\n')
+                if note_heading:
+                    output.append(f'> {note_text} ({note_heading})\n')
+                else:
+                    output.append(f'> {note_text}\n')
 
     return output
 
@@ -166,7 +179,15 @@ def __check_if_output_file_is_needed(ctx: click.Context, param: Any, value: Any)
 @click.option(
     '--print-only', '-p', is_flag=True, help='Only print Markdown to the console.'
 )
-def main(input_file: str, output_file: str, print_only: bool) -> None:
+@click.option(
+    '--suppress-pages',
+    '-s',
+    is_flag=True,
+    help='Suppress page references in output.',
+)
+def main(
+    input_file: str, output_file: str, print_only: bool, suppress_pages: bool
+) -> None:
     with open(input_file, 'r') as i_fh:
         soup = BeautifulSoup(i_fh, 'html.parser')
 
@@ -176,7 +197,7 @@ def main(input_file: str, output_file: str, print_only: bool) -> None:
         print(e)
         exit(1)
 
-    output = extract_annotations(soup, trsl)
+    output = extract_annotations(soup, trsl, suppress_pages)
 
     for line in output:
         print(line)

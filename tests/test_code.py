@@ -53,6 +53,26 @@ class TestCode:
         with raises(ValueError):
             main.guess_language(soup, SUPPORTED_LANGUAGES)
 
+    def test_extract_annotations_suppress_pages(self) -> None:
+        for fixture in self.__get_language_test_fixtures():
+            with open(fixture[1], 'r') as i_fh:
+                soup = BeautifulSoup(i_fh, 'html.parser')
+
+            output = main.extract_annotations(
+                soup,
+                SUPPORTED_LANGUAGES.get(fixture[0]),
+                suppress_pages=True,
+            )
+            assert output == [
+                '# Basti Tee - My ebook\n',
+                '## First section\n',
+                '> 🔖\n',
+                'A marked text.\n',
+                'More marked text.\n',
+                '> Personal note.\n',
+                '> Note without text.\n',
+            ]
+
     def __get_language_test_fixtures(self) -> list[tuple[str, str]]:
         res_path = path.join(path.dirname(__file__), 'res')
         fixtures = []
