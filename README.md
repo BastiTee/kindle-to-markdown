@@ -37,9 +37,9 @@ pip install kindle-to-markdown
 Prerequisites:
 
 -   `python` in a [supported version](pyproject.toml) available on your path.
--   Package manager `poetry` installed (e.g., `python -m pip install poetry`)
+-   Package manager `uv` installed (see [uv installation](https://docs.astral.sh/uv/getting-started/installation/))
 
 ```shell
 make
-poetry run python -m kindle_to_markdown --help
+uv run python -m kindle_to_markdown --help
 ```

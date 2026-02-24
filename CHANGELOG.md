@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0
+
+- Modernize build tooling: Poetry to uv, flake8/black/isort to Ruff
+- Drop Python 3.9 support (EOL)
+- Add PEP 561 py.typed marker
+- Add Dependabot configuration
+- Update CI to use astral-sh/setup-uv
+
 ## 0.0.3
 
 - Add project metadata for better accessiblity on PyPi.org
@@ -20,7 +28,7 @@
 - Run
 
 ```shell
-VERSION=$( poetry version --short ) &&\
+VERSION=$( grep '^version' pyproject.toml | head -1 | sed 's/.*"\(.*\)"/\1/' ) &&\
 echo "Release: ${VERSION}" &&\
 git tag -a ${VERSION} -m "Version ${VERSION}" &&\
 git push --tags
@@ -30,5 +38,5 @@ git push --tags
 - Push to PyPi
 
 ```shell
-poetry run twine upload dist/*
+uv publish
 ```

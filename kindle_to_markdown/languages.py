@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Language definitions for Kindle annotation file."""
 
 SUPPORTED_LANGUAGES: dict = {
