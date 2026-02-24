@@ -22,12 +22,10 @@ help: ## Show this help
 # Bundle tasks
 
 all: clean venv build ## Full pipeline: clean, venv, build
-	@echo Executed default build pipeline
 
 # Clean up and set up
 
 clean: ## Remove generated files and caches
-	@echo Clean project base
 	find . -type d \
 	-name ".venv" -o \
 	-name ".tox" -o \
@@ -42,57 +40,44 @@ clean: ## Remove generated files and caches
 	|xargs rm -rfv
 
 clear-cache: ## Clear uv cache
-	@echo Clear uv cache
 	uv cache clean
 
 venv: clean ## Install dependencies into .venv
-	@echo Initialize virtualenv, i.e., install required packages etc.
 	uv sync
 
 # Building software
 
 build: test mypy lint format-check ## Run tests, checks, and package
-	@echo Run build process to package application
 	uv build
 
 test: ## Run all test suites
-	@echo Run all tests suites
 	uv run py.test tests
 
 mypy: ## Run static type checks
-	@echo Run static code checks against source code base
 	uv run mypy $(PY_FILES)
 
 lint: ## Run linting with Ruff
-	@echo Run linting checks against source code base
 	uv run ruff check $(PY_FILES)
 
 lint-fix: ## Run linting with Ruff and auto-fix
-	@echo Run linting checks and fix issues
 	uv run ruff check --fix $(PY_FILES)
 
 format: ## Format code with Ruff
-	@echo Format code with Ruff
 	uv run ruff format $(PY_FILES)
 
 format-check: ## Check code formatting with Ruff
-	@echo Check code formatting with Ruff
 	uv run ruff format --check $(PY_FILES)
 
 outdated: ## Show outdated dependencies
-	@echo Show outdated dependencies
 	uv pip list --outdated --exclude-editable
 
 update: ## Update all dependencies
-	@echo Update all dependencies
 	uv sync --upgrade
 
 # Executing
 
 run-venv: ## Execute package in virtual environment
-	@echo Execute package directly in virtual environment
 	uv run python -m kindle_to_markdown
 
 install: ## Install package using activated Python env
-	@echo Install package using the activated Python env
 	python -m pip install --upgrade .
