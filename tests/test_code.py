@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
 """Basic test suite."""
 
-import __future__  # noqa: F401
-
 from os import listdir, path
-from typing import Any, List, Tuple
+from typing import Any
 
 from bs4 import BeautifulSoup
 from pytest import raises
@@ -14,19 +11,18 @@ from kindle_to_markdown.__main__ import NoteHeading
 from kindle_to_markdown.languages import SUPPORTED_LANGUAGES
 
 
-class TestCode:  # noqa: D101
-
-    def test_extract_note_heading(self) -> None:  # noqa: D102
+class TestCode:
+    def test_extract_note_heading(self) -> None:
         for test_case in self.__get_extraction_test_fixtures():
             results = main.extract_note_heading(test_case[0], SUPPORTED_LANGUAGES['de'])
             assert test_case[1] == results
 
-    def test_extract_language_keys_from_note_heading(self) -> None:  # noqa: D102
+    def test_extract_language_keys_from_note_heading(self) -> None:
         for test_case in self.__get_extraction_test_fixtures():
             results = main.extract_language_keys_from_note_heading(test_case[0])
             assert test_case[2] == results
 
-    def test_extract_annotations(self) -> None:  # noqa: D102
+    def test_extract_annotations(self) -> None:
         for fixture in self.__get_language_test_fixtures():
             with open(fixture[1], 'r') as i_fh:
                 soup = BeautifulSoup(i_fh, 'html.parser')
@@ -42,7 +38,7 @@ class TestCode:  # noqa: D101
                 '> Note without text. (p. 6, pos. 49)\n',
             ]
 
-    def test_guess_language(self) -> None:  # noqa: D102
+    def test_guess_language(self) -> None:
         # Check supported languages
         for fixture in self.__get_language_test_fixtures():
             with open(fixture[1], 'r') as i_fh:
@@ -57,7 +53,27 @@ class TestCode:  # noqa: D101
         with raises(ValueError):
             main.guess_language(soup, SUPPORTED_LANGUAGES)
 
-    def __get_language_test_fixtures(self) -> List[Tuple[str, str]]:
+    def test_extract_annotations_suppress_pages(self) -> None:
+        for fixture in self.__get_language_test_fixtures():
+            with open(fixture[1], 'r') as i_fh:
+                soup = BeautifulSoup(i_fh, 'html.parser')
+
+            output = main.extract_annotations(
+                soup,
+                SUPPORTED_LANGUAGES.get(fixture[0]),
+                suppress_pages=True,
+            )
+            assert output == [
+                '# Basti Tee - My ebook\n',
+                '## First section\n',
+                '> 🔖\n',
+                'A marked text.\n',
+                'More marked text.\n',
+                '> Personal note.\n',
+                '> Note without text.\n',
+            ]
+
+    def __get_language_test_fixtures(self) -> list[tuple[str, str]]:
         res_path = path.join(path.dirname(__file__), 'res')
         fixtures = []
         for f in listdir(res_path):
@@ -66,7 +82,7 @@ class TestCode:  # noqa: D101
             fixtures.append((f[14:16], path.join(res_path, f)))
         return fixtures
 
-    def __get_extraction_test_fixtures(self) -> List[Any]:
+    def __get_extraction_test_fixtures(self) -> list[Any]:
         return [
             (
                 'Markierung(gelb) - Seite 61 · Position 596',
@@ -114,12 +130,14 @@ class TestCode:  # noqa: D101
                 ['Markierung', 'Seite', 'Position'],
             ),
             (
-                'Markierung(gelb) - Chapter 1: The Matching Principle: How to Fail at Recruiting Spies > Seite 8 · Position 268',  # noqa: E501
+                'Markierung(gelb) - Chapter 1: The Matching Principle:'
+                ' How to Fail at Recruiting Spies > Seite 8 · Position 268',
                 NoteHeading(
                     'textmark',
                     '8',
                     '268',
-                    'Chapter 1: The Matching Principle: How to Fail at Recruiting Spies',  # noqa: E501
+                    'Chapter 1: The Matching Principle:'
+                    ' How to Fail at Recruiting Spies',
                 ),
                 ['Markierung', 'Seite', 'Position'],
             ),

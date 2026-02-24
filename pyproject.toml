@@ -1,17 +1,16 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.7.2,<0.8"]
+build-backend = "uv_build"
 
-[tool.poetry]
+[project]
 name = "kindle_to_markdown"
-version = "0.0.3"
+version = "0.1.0"
 description = "A simple program to convert Kindle HTML annotations to a Markdown file."
-license = "Apache 2.0"
-authors = ["Basti Tee <basti.tee@icloud.com>"]
-maintainers = ["Basti Tee <basti.tee@icloud.com>"]
-homepage = "https://github.com/BastiTee/kindle-to-markdown"
-repository = "https://github.com/BastiTee/kindle-to-markdown"
+license = "Apache-2.0"
+authors = [{ name = "Basti Tee", email = "basti.tee@icloud.com" }]
+maintainers = [{ name = "Basti Tee", email = "basti.tee@icloud.com" }]
 readme = "README.md"
+requires-python = ">=3.10,<3.14"
 keywords = ["kindle", "markdown", "converter", "python"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -19,57 +18,47 @@ classifiers = [
     "Natural Language :: English",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
+dependencies = ["click>=8.1.7", "beautifulsoup4>=4.12.3"]
 
-[tool.poetry.dependencies]
-python = "^3.9.0"
-click = "^8.1.7"
-beautifulsoup4 = "^4.12.3"
-twine = "^6.0.1"
+[project.urls]
+Homepage = "https://github.com/BastiTee/kindle-to-markdown"
+Repository = "https://github.com/BastiTee/kindle-to-markdown"
 
-[tool.poetry.dev-dependencies]
-autopep8 = "^2"
-flake8 = "^7"
-flake8-quotes = "^3"
-flake8-docstrings = "^1"
-flake8-builtins = "^2"
-flake8-blind-except = "^0"
-flake8-use-fstring = "^1"
-flake8-isort = "^6"
-pep8-naming = "^0"
-isort = "^5"
-pytest = "^8"
-mypy = "^1"
-typing-extensions = "^4"
-black = "^24"
-pipdeptree = "^2"
+[project.scripts]
+kindle_to_markdown = "kindle_to_markdown.__main__:main"
 
-[tool.poetry.scripts]
-kindle_to_markdown = 'kindle_to_markdown.__main__:main'
+[tool.uv.build-backend]
+module-root = ""
+
+[dependency-groups]
+dev = ["mypy>=1", "pytest>=9", "ruff>=0.8", "typing-extensions>=4"]
 
 [tool.mypy]
-# Untyped definitions and calls
-# Disallows defining functions without type annotations or with
-# incomplete type annotations.
 disallow_untyped_defs = true
-# Type-checks the interior of functions without type annotations
 check_untyped_defs = true
-# Import discovery
 follow_imports = "normal"
 ignore_missing_imports = true
-# Warning configuration
 warn_unused_ignores = true
 warn_unreachable = true
-# Error message config
-# pretty = true
 
 [tool.pytest]
-addopts = "-p no:warnings"
+addopts = ["-p", "no:warnings"]
 
-[tool.black]
-skip-string-normalization = true
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "BLE", "A", "S"]
+ignore = ["E203", "S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+
+[tool.ruff.format]
+quote-style = "preserve"

@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Run current file",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "env": {
