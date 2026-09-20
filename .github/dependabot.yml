@@ -2,9 +2,13 @@ version: 2
 updates:
     - package-ecosystem: "pip"
       directory: "/"
+      assignees:
+        - "BastiTee"
       schedule:
           interval: "weekly"
     - package-ecosystem: "github-actions"
       directory: "/"
+      assignees:
+        - "BastiTee"
       schedule:
           interval: "weekly"
